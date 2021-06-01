@@ -1,1 +1,1 @@
-# Simple project that contains anime random quotes
+# Simple project that fetch anime random quotes using ReactJS
