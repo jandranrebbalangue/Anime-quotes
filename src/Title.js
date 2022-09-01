@@ -1,30 +1,34 @@
-import DisplayTitle from './DisplayTitle'
-import {useState, useEffect} from 'react'
-import axios from 'axios'
+import DisplayTitle from "../components/DisplayTitle";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 function AnimeTitle() {
-  const [title, setTitle] = useState([])
-  const [animeTitle, setAnimeTitle] = useState('')
-  const displayAnimeTitle = () => {
-    const url = 'https://animechan.vercel.app/api/quotes/anime?title='
-    axios.get(`${url} ${animeTitle}`).then(response => {
-      setTitle(response.data)
-      console.log(response.data)
-    })
-  }
-  const handleChange = e => {
-    setAnimeTitle(e.target.value)
-  }
+  const [title, setTitle] = useState([]);
+  const [animeTitle, setAnimeTitle] = useState("");
+
+  const handleChange = (e) => {
+    setAnimeTitle(e.target.value);
+  };
   useEffect(() => {
-    displayAnimeTitle()
-  })
+    let cancel = false;
+    const displayAnimeTitle = async () => {
+      const url = "https://animechan.vercel.app/api/quotes/anime?title=";
+      const { data } = await axios.get(`${url} ${animeTitle}`);
+      if (cancel) return;
+      setTitle(data);
+    };
+    displayAnimeTitle();
+    return () => {
+      cancel = true;
+    };
+  }, []);
   return (
     <div>
       <p>sample anime title</p>
       <input type="text" onChange={handleChange} />
       <DisplayTitle title={title} />
     </div>
-  )
+  );
 }
 
-export default AnimeTitle
+export default AnimeTitle;
